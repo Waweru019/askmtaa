@@ -1,51 +1,83 @@
-import { AfterViewInit, Component,signal ,ElementRef, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { 
+  AfterViewInit, 
+  Component, 
+  ElementRef, 
+  OnDestroy, 
+  OnInit, 
+  PLATFORM_ID, 
+  inject, 
+  signal 
+} from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet, RouterLink } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterOutlet, RouterLink], // Added RouterLink here
+  imports: [CommonModule, FormsModule,RouterLink],
   templateUrl: './landing.html',
   styleUrl: './landing.css',
 })
-export class Landing {
+export class Landing implements OnInit, AfterViewInit, OnDestroy {
+  // SSR Platform Check Injection
+  private platformId = inject(PLATFORM_ID);
+
+  // Services
+  private titleService = inject(Title);
+  private metaService = inject(Meta);
+  private el = inject(ElementRef);
+
   // Navigation & UI State
   mobileMenuOpen = signal<boolean>(false);
+  private observer?: IntersectionObserver;
+
   toggleMobileMenu() {
     this.mobileMenuOpen.update(v => !v);
   }
 
-private observer?: IntersectionObserver;
+  ngOnInit(): void {
+    // Dynamic SEO Metadata (Runs on both SSR and Client)
+    this.titleService.setTitle('Askmtaa - Find Local Answers');
 
-  constructor(private el: ElementRef) {}
+    this.metaService.updateTag({
+      name: 'description',
+      content: 'Explore local neighborhood services, ask questions, and engage with your community.'
+    });
 
-  ngAfterViewInit() {
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            // Optional: stop observing once revealed
-            this.observer?.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.12,
-        rootMargin: '0px 0px -40px 0px'
-      }
-    );
-
-    // Observe all sections with .reveal
-    const sections = this.el.nativeElement.querySelectorAll('.reveal');
-    sections.forEach((section: Element) => this.observer?.observe(section));
+    this.metaService.updateTag({
+      property: 'og:title',
+      content: 'Askmtaa - Find Local Answers'
+    });
   }
 
-  ngOnDestroy() {
-    this.observer?.disconnect();
-  
+  ngAfterViewInit(): void {
+    // Only execute DOM animations on the client browser
+    if (isPlatformBrowser(this.platformId)) {
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              this.observer?.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.12,
+          rootMargin: '0px 0px -40px 0px'
+        }
+      );
+
+      const sections = this.el.nativeElement.querySelectorAll('.reveal');
+      sections.forEach((section: Element) => this.observer?.observe(section));
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.observer?.disconnect();
+    }
+  }
 }
-}
-  // ... rest of your existing code (mobileMenuOpen, toggleMobileMenu, etc.)

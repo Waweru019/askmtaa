@@ -1,4 +1,5 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -118,41 +119,56 @@ export interface AuthResponse {
 })
 export class ServiceApi {
   private http = inject(HttpClient);
+  private platformId = inject(PLATFORM_ID);
   private apiUrl = 'http://localhost:8080/api';
 
-  tokenSignal = signal<string | null>(localStorage.getItem('token'));
+  // Safely initialize signal based on browser execution environment
+  tokenSignal = signal<string | null>(
+    isPlatformBrowser(this.platformId) ? localStorage.getItem('token') : null
+  );
 
-  // ---------- Token helpers ----------
+  // ---------- Token & Storage helpers ----------
   saveToken(token: string): void {
-    if (token) {
+    if (token && isPlatformBrowser(this.platformId)) {
       localStorage.setItem('token', token);
       this.tokenSignal.set(token);
     }
   }
+
   saveUser(user: any): void {
-  localStorage.setItem('user', JSON.stringify(user));
-}
-  // Example inside ServiceApi
-getUser() {
-  const userData = localStorage.getItem('user');
-  return userData ? JSON.parse(userData) : null;
-}
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('user', JSON.stringify(user));
+    }
+  }
+
+  getUser(): any {
+    if (isPlatformBrowser(this.platformId)) {
+      const userData = localStorage.getItem('user');
+      return userData ? JSON.parse(userData) : null;
+    }
+    return null;
+  }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
-  
 
   isLoggedIn(): boolean {
     return this.isAuthenticated();
   }
 
   logout(): void {
-    localStorage.removeItem('token');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
     this.tokenSignal.set(null);
   }
 
@@ -180,7 +196,7 @@ getUser() {
     return this.http.get<Category[]>(`${this.apiUrl}/vendor/categories`);
   }
 
-  // ---------- Protected Vendor routes (now with forced header) ----------
+  // ---------- Protected Vendor routes ----------
   getVendorDashboard(): Observable<VendorProfile> {
     return this.http.get<VendorProfile>(
       `${this.apiUrl}/vendor/dashboard`,
@@ -234,20 +250,19 @@ getUser() {
     );
   }
 
- uploadImage(file: File): Observable<{ imageUrl: string }> {
-  const formData = new FormData();
-  formData.append('file', file); // Must match c.FormFile("file") in Go
+  uploadImage(file: File): Observable<{ imageUrl: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
 
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    'Authorization': `Bearer ${token}`
-    // DO NOT set 'Content-Type': 'application/json' here!
-  });
+    const token = this.getToken(); // Replaced direct localStorage access with SSR-safe helper
+    const headers = new HttpHeaders({
+      Authorization: token ? `Bearer ${token}` : ''
+    });
 
-  return this.http.post<{ imageUrl: string }>(
-    `${this.apiUrl}/vendor/upload`,
-    formData,
-    { headers }
-  );
-}
+    return this.http.post<{ imageUrl: string }>(
+      `${this.apiUrl}/vendor/upload`,
+      formData,
+      { headers }
+    );
+  }
 }

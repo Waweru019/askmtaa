@@ -59,7 +59,7 @@ export interface AdminCategory {
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, DecimalPipe, DatePipe],
+  imports: [CommonModule, FormsModule, DecimalPipe],
   templateUrl: './admin.html',
   styleUrl: './admin.css',
 })

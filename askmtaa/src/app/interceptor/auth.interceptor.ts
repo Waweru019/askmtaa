@@ -1,7 +1,15 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = localStorage.getItem('token');
+  const platformId = inject(PLATFORM_ID);
+  let token: string | null = null;
+
+  // Only access localStorage if executing in the browser
+  if (isPlatformBrowser(platformId)) {
+    token = localStorage.getItem('token');
+  }
 
   // Debug logs (remove later)
   console.log('🔑 Interceptor running');

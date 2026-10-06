@@ -1,0 +1,439 @@
+<div class="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans antialiased">
+
+  <!-- ================= TOP HEADER ================= -->
+  <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800">
+    <div class="px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+      
+      <!-- Brand -->
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center font-black text-white text-sm shadow-lg shadow-emerald-600/20 shrink-0">
+          AM
+        </div>
+        <div class="min-w-0">
+          <h1 class="text-sm font-bold text-white leading-none truncate">AskMtaa Admin</h1>
+          <p class="text-[11px] text-slate-400 mt-0.5 hidden sm:block">Platform Management</p>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden lg:flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
+        <button 
+          (click)="activeTab.set('overview')"
+          [class]="activeTab() === 'overview' 
+            ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20' 
+            : 'text-slate-400 hover:text-white hover:bg-slate-800'"
+          class="px-4 py-2 rounded-lg transition-all duration-200">
+          📊 Overview
+        </button>
+
+        <button 
+          (click)="activeTab.set('vendors')"
+          [class]="activeTab() === 'vendors' 
+            ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20' 
+            : 'text-slate-400 hover:text-white hover:bg-slate-800'"
+          class="px-4 py-2 rounded-lg transition-all duration-200">
+          🏢 Vendors
+          <span class="ml-1.5 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-slate-800 text-[10px] font-bold"
+                [class.bg-white/20]="activeTab() === 'vendors'">
+            {{ vendors().length }}
+          </span>
+        </button>
+
+        <button 
+          (click)="activeTab.set('listings')"
+          [class]="activeTab() === 'listings' 
+            ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20' 
+            : 'text-slate-400 hover:text-white hover:bg-slate-800'"
+          class="px-4 py-2 rounded-lg transition-all duration-200">
+          📦 Listings
+          <span class="ml-1.5 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-slate-800 text-[10px] font-bold"
+                [class.bg-white/20]="activeTab() === 'listings'">
+            {{ listings().length }}
+          </span>
+        </button>
+
+        <button 
+          (click)="activeTab.set('categories')"
+          [class]="activeTab() === 'categories' 
+            ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20' 
+            : 'text-slate-400 hover:text-white hover:bg-slate-800'"
+          class="px-4 py-2 rounded-lg transition-all duration-200">
+          🏷️ Categories
+        </button>
+      </nav>
+
+      <!-- Mobile Menu Toggle -->
+      <button 
+        (click)="mobileNavOpen.set(!mobileNavOpen())"
+        class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+        <svg *ngIf="!mobileNavOpen()" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <svg *ngIf="mobileNavOpen()" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Dropdown -->
+    <div *ngIf="mobileNavOpen()" class="lg:hidden border-t border-slate-800 bg-slate-900 px-4 py-3">
+      <div class="grid grid-cols-2 gap-2">
+        <button 
+          (click)="activeTab.set('overview'); mobileNavOpen.set(false)"
+          [class]="activeTab() === 'overview' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300'"
+          class="flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition">
+          📊 Overview
+        </button>
+        <button 
+          (click)="activeTab.set('vendors'); mobileNavOpen.set(false)"
+          [class]="activeTab() === 'vendors' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300'"
+          class="flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition">
+          🏢 Vendors ({{ vendors().length }})
+        </button>
+        <button 
+          (click)="activeTab.set('listings'); mobileNavOpen.set(false)"
+          [class]="activeTab() === 'listings' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300'"
+          class="flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition">
+          📦 Listings ({{ listings().length }})
+        </button>
+        <button 
+          (click)="activeTab.set('categories'); mobileNavOpen.set(false)"
+          [class]="activeTab() === 'categories' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-300'"
+          class="flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold transition">
+          🏷️ Categories
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    <!-- ========== TAB 1: OVERVIEW ========== -->
+    <div *ngIf="activeTab() === 'overview'" class="space-y-6">
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        
+        <!-- Total Listings -->
+        <div class="group relative overflow-hidden bg-slate-900 rounded-2xl border border-slate-800 p-5 hover:border-slate-700 transition">
+          <div class="absolute top-0 right-0 w-24 h-24 bg-slate-800/40 rounded-full -mr-8 -mt-8"></div>
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Listings</p>
+          <p class="text-3xl font-black text-white mt-2 tracking-tight">{{ stats().totalListings || 0 }}</p>
+          <p class="text-[11px] text-slate-500 mt-1 font-medium">All created items</p>
+        </div>
+
+        <!-- Active Listings -->
+        <div class="group relative overflow-hidden bg-slate-900 rounded-2xl border border-slate-800 p-5 hover:border-emerald-800/50 transition">
+          <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-900/20 rounded-full -mr-8 -mt-8"></div>
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Active Listings</p>
+          <p class="text-3xl font-black text-emerald-400 mt-2 tracking-tight">{{ stats().activeListings || 0 }}</p>
+          <p class="text-[11px] text-emerald-500/80 mt-1 font-medium">Visible on marketplace</p>
+        </div>
+
+        <!-- Paused Listings -->
+        <div class="group relative overflow-hidden bg-slate-900 rounded-2xl border border-slate-800 p-5 hover:border-amber-800/50 transition">
+          <div class="absolute top-0 right-0 w-24 h-24 bg-amber-900/15 rounded-full -mr-8 -mt-8"></div>
+          <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Paused Listings</p>
+          <p class="text-3xl font-black text-amber-400 mt-2 tracking-tight">{{ stats().pausedListings || 0 }}</p>
+          <p class="text-[11px] text-amber-500/80 mt-1 font-medium">Hidden from marketplace</p>
+        </div>
+      </div>
+
+      <!-- Recent Vendors Table -->
+      <div *ngIf="vendors().length > 0" class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+          <h3 class="text-sm font-bold text-white">Recent Vendors</h3>
+          <button 
+            (click)="activeTab.set('vendors')"
+            class="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 transition">
+            View all →
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-slate-950/60 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <th class="px-5 py-3">Business Name</th>
+                <th class="px-5 py-3 hidden sm:table-cell">Phone</th>
+                <th class="px-5 py-3 hidden md:table-cell">WhatsApp</th>
+                <th class="px-5 py-3">Location</th>
+                <th class="px-5 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/70">
+              <tr *ngFor="let v of vendors().slice(0, 5)" class="hover:bg-slate-800/40 transition">
+                <td class="px-5 py-3.5">
+                  <div class="flex items-center gap-2">
+                    <span class="font-semibold text-white">{{ v.businessName }}</span>
+                    <span *ngIf="v.isVerified" class="text-emerald-400 text-xs" title="Verified">✓</span>
+                  </div>
+                </td>
+                <td class="px-5 py-3.5 text-slate-400 hidden sm:table-cell">{{ v.phoneNumber }}</td>
+                <td class="px-5 py-3.5 text-slate-400 hidden md:table-cell">{{ v.whatsAppNumber }}</td>
+                <td class="px-5 py-3.5 text-slate-400">{{ v.defaultLocation }}</td>
+                <td class="px-5 py-3.5">
+                  <span 
+                    [class]="v.status === 'active' 
+                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
+                      : 'bg-red-500/10 text-red-400 border-red-500/20'"
+                    class="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border">
+                    {{ v.status }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Empty state for overview -->
+      <div *ngIf="vendors().length === 0" class="bg-slate-900 rounded-2xl border border-slate-800 p-10 text-center">
+        <p class="text-slate-400 text-sm">No vendors registered yet.</p>
+      </div>
+    </div>
+
+    <!-- ========== TAB 2: VENDORS ========== -->
+    <div *ngIf="activeTab() === 'vendors'" class="space-y-5">
+
+      <!-- Search -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+        <div class="relative flex-1 max-w-md">
+          <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input 
+            type="text" 
+            [ngModel]="vendorSearch()" 
+            (ngModelChange)="vendorSearch.set($event)"
+            placeholder="Search by name, location or phone..."
+            class="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-900 border border-slate-800 rounded-xl text-white placeholder:text-slate-500 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition">
+        </div>
+      </div>
+
+      <!-- Vendors Table -->
+      <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs min-w-[640px]">
+            <thead>
+              <tr class="bg-slate-950/60 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <th class="px-5 py-3.5">Vendor</th>
+                <th class="px-5 py-3.5">Contact</th>
+                <th class="px-5 py-3.5">Location</th>
+                <th class="px-5 py-3.5">Verified</th>
+                <th class="px-5 py-3.5">Status</th>
+                <th class="px-5 py-3.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/70">
+              <tr *ngFor="let v of filteredVendors()" class="hover:bg-slate-800/40 transition">
+                <td class="px-5 py-3.5 font-semibold text-white">{{ v.businessName }}</td>
+                <td class="px-5 py-3.5 text-slate-400">{{ v.phoneNumber }}</td>
+                <td class="px-5 py-3.5 text-slate-400">{{ v.defaultLocation }}</td>
+                <td class="px-5 py-3.5">
+                  <button 
+                    (click)="toggleVendorVerification(v.id, v.isVerified)"
+                    [class]="v.isVerified 
+                      ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' 
+                      : 'bg-slate-800 text-slate-400 border-slate-700 hover:border-slate-600'"
+                    class="px-3 py-1 rounded-lg border text-[10px] font-bold transition">
+                    {{ v.isVerified ? 'Verified ✓' : 'Unverified' }}
+                  </button>
+                </td>
+                <td class="px-5 py-3.5">
+                  <span 
+                    [class]="v.status === 'active' ? 'text-emerald-400' : 'text-red-400'"
+                    class="font-bold uppercase text-[10px]">
+                    {{ v.status }}
+                  </span>
+                </td>
+                <td class="px-5 py-3.5 text-right">
+                  <button 
+                    (click)="toggleVendorStatus(v.id, v.status)"
+                    class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-semibold transition">
+                    {{ v.status === 'active' ? 'Suspend' : 'Activate' }}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty state -->
+        <div *ngIf="filteredVendors().length === 0" class="px-5 py-12 text-center">
+          <p class="text-slate-500 text-sm">No vendors found.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== TAB 3: LISTINGS ========== -->
+    <div *ngIf="activeTab() === 'listings'" class="space-y-5">
+
+      <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs min-w-[700px]">
+            <thead>
+              <tr class="bg-slate-950/60 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <th class="px-5 py-3.5">Title</th>
+                <th class="px-5 py-3.5">Vendor</th>
+                <th class="px-5 py-3.5">Type</th>
+                <th class="px-5 py-3.5">Price</th>
+                <th class="px-5 py-3.5">Status</th>
+                <th class="px-5 py-3.5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/70">
+              <tr *ngFor="let item of listings()" class="hover:bg-slate-800/40 transition">
+                <td class="px-5 py-3.5 font-semibold text-white max-w-[180px] truncate">{{ item.title }}</td>
+                <td class="px-5 py-3.5 text-slate-400">{{ item.businessName }}</td>
+                <td class="px-5 py-3.5">
+                  <span class="inline-flex uppercase text-[10px] font-bold px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
+                    {{ item.listingType }}
+                  </span>
+                </td>
+                <td class="px-5 py-3.5 font-bold text-emerald-400 whitespace-nowrap">
+                  KSh {{ item.price | number }}
+                </td>
+                <td class="px-5 py-3.5">
+                  <select 
+                    [ngModel]="item.status"
+                    (ngModelChange)="updateListingStatus(item.id, $event)"
+                    class="bg-slate-950 border border-slate-700 text-xs text-white px-2.5 py-1.5 rounded-lg outline-none focus:border-emerald-500 transition">
+                    <option value="active">Active</option>
+                    <option value="paused">Paused</option>
+                    <option value="flagged">Flagged</option>
+                  </select>
+                </td>
+                <td class="px-5 py-3.5 text-right">
+                  <button 
+                    (click)="deleteListing(item.id)" 
+                    class="px-3.5 py-1.5 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded-lg text-xs font-semibold transition border border-red-500/20">
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div *ngIf="listings().length === 0" class="px-5 py-12 text-center">
+          <p class="text-slate-500 text-sm">No listings yet.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== TAB 4: CATEGORIES ========== -->
+    <div *ngIf="activeTab() === 'categories'" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- Create Category Card -->
+      <div class="bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-800 space-y-4 h-fit">
+        <h3 class="text-sm font-bold text-white">Add New Category</h3>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Category Name</label>
+          <input 
+            type="text" 
+            [ngModel]="newCategoryName()"
+            (ngModelChange)="newCategoryName.set($event)"
+            placeholder="e.g. Hiking & Adventures"
+            class="w-full text-sm px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder:text-slate-500 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Target Type</label>
+          <select 
+            [ngModel]="newCategoryType()"
+            (ngModelChange)="newCategoryType.set($event)"
+            class="w-full text-sm px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-white outline-none focus:border-emerald-500 transition">
+            <option value="item">Item / Product</option>
+            <option value="service">Service</option>
+            <option value="trip">Trip / Event</option>
+          </select>
+        </div>
+
+        <button 
+          (click)="addCategory()"
+          class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm py-2.5 rounded-xl transition shadow-lg shadow-emerald-600/20 active:scale-[0.98]">
+          Create Category
+        </button>
+      </div>
+
+      <!-- Categories List -->
+      <div class="lg:col-span-2 bg-slate-900 rounded-2xl border border-slate-800 p-5 sm:p-6">
+        <h3 class="text-sm font-bold text-white mb-5">Existing Categories</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div *ngFor="let cat of categories()" 
+               class="p-4 bg-slate-950 rounded-xl border border-slate-800/80 hover:border-slate-700 transition">
+
+            <!-- VIEW MODE -->
+            <ng-container *ngIf="editingCategoryId() !== cat.id; else editMode">
+              <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="text-sm font-bold text-white truncate">{{ cat.name }}</p>
+                  <p class="text-[11px] text-slate-500 uppercase tracking-wider font-semibold mt-1">
+                    Type: <span class="text-amber-400">{{ cat.type }}</span>
+                  </p>
+                </div>
+
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button 
+                    (click)="startEditCategory(cat)" 
+                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 transition"
+                    title="Edit">
+                    ✏️
+                  </button>
+                  <button 
+                    (click)="deleteCategory(cat.id)" 
+                    class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition"
+                    title="Delete">
+                    🗑️
+                  </button>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- EDIT MODE -->
+            <ng-template #editMode>
+              <div class="space-y-2.5">
+                <input 
+                  type="text" 
+                  [ngModel]="editCategoryName()" 
+                  (ngModelChange)="editCategoryName.set($event)"
+                  class="w-full text-sm px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white outline-none focus:border-emerald-500 transition" />
+                
+                <select 
+                  [ngModel]="editCategoryType()" 
+                  (ngModelChange)="editCategoryType.set($event)"
+                  class="w-full text-sm px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white outline-none focus:border-emerald-500 transition">
+                  <option value="item">Item / Product</option>
+                  <option value="service">Service</option>
+                  <option value="trip">Trip / Event</option>
+                </select>
+
+                <div class="flex items-center gap-2 pt-1">
+                  <button 
+                    (click)="saveCategory(cat.id)" 
+                    class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 rounded-lg transition">
+                    Save
+                  </button>
+                  <button 
+                    (click)="cancelEditCategory()" 
+                    class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs py-2 rounded-lg transition">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+        <div *ngIf="categories().length === 0" class="py-10 text-center">
+          <p class="text-slate-500 text-sm">No categories created yet.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>

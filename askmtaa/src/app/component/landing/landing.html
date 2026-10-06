@@ -1,0 +1,422 @@
+<div class="min-h-screen bg-slate-50 text-slate-800 font-sans antialiased flex flex-col">
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur-sm">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
+      
+      <!-- Brand -->
+      <a routerLink="/" class="flex items-center gap-2.5 group" title="AskMtaa Home - Neighborhood Services Kenya">
+        <img 
+          src="/logo.jpeg" 
+          alt="AskMtaa Logo" 
+          class="h-10 w-10 rounded-xl object-contain shadow-sm"
+        />
+        <div>
+          <span class="text-xl font-black tracking-tight text-slate-900">AskMtaa</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav class="hidden items-center gap-8 md:flex" aria-label="Main Navigation">
+        <a routerLink="/directory" routerLinkActive="text-emerald-700 font-bold" class="text-sm font-semibold text-slate-600 hover:text-emerald-700 transition">Directory</a>
+        <a href="#how-it-works" class="text-sm font-semibold text-slate-600 hover:text-emerald-700 transition">How It Works</a>
+        <a href="#bot-instructions" class="text-sm font-semibold text-slate-600 hover:text-emerald-700 transition">Bot Instructions</a>
+        <a href="#faqs" class="text-sm font-semibold text-slate-600 hover:text-emerald-700 transition">FAQs</a>
+        <a href="#for-vendors" class="text-sm font-semibold text-slate-600 hover:text-emerald-700 transition">For Service Providers</a>
+      </nav>
+
+      <!-- Desktop Actions -->
+      <div class="hidden items-center gap-3 md:flex">
+        <a 
+          href="https://wa.me/254783052621?text=Hello" 
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Chat with AskMtaa WhatsApp Bot"
+          class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition"
+        >
+          <svg class="h-4 w-4 fill-emerald-600" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.205 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+          </svg>
+          Try WhatsApp Bot
+        </a>
+        <a 
+          routerLink="/register"
+          title="List your small business on AskMtaa"
+          aria-label="Register your business on AskMtaa"
+          class="rounded-xl bg-emerald-600 px-5 py-2 text-sm font-bold text-white shadow-sm hover:bg-emerald-700 transition inline-block text-center"
+        >
+          List Business
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button 
+        (click)="toggleMobileMenu()" 
+        type="button" 
+        aria-label="Toggle Navigation Menu"
+        class="inline-flex rounded-lg p-2 text-slate-600 hover:bg-slate-100 md:hidden"
+      >
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div *ngIf="mobileMenuOpen()" class="border-t border-slate-100 bg-white px-4 pb-4 pt-3 md:hidden">
+      <div class="flex flex-col gap-3">
+        <a routerLink="/directory" (click)="toggleMobileMenu()" class="py-1.5 text-sm font-semibold text-slate-700">Directory</a>
+        <a href="#how-it-works" (click)="toggleMobileMenu()" class="py-1.5 text-sm font-semibold text-slate-700">How It Works</a>
+        <a href="#bot-instructions" (click)="toggleMobileMenu()" class="py-1.5 text-sm font-semibold text-slate-700">Bot Instructions</a>
+        <a href="#faqs" (click)="toggleMobileMenu()" class="py-1.5 text-sm font-semibold text-slate-700">FAQs</a>
+        <a href="#for-vendors" (click)="toggleMobileMenu()" class="py-1.5 text-sm font-semibold text-slate-700">For Service Providers</a>
+        <div class="mt-2 flex flex-col gap-2 border-t border-slate-100 pt-3">
+          <a href="https://wa.me/254783052621?text=Hello" target="_blank" rel="noopener noreferrer"
+             class="w-full rounded-xl border border-slate-200 py-2.5 text-center text-sm font-semibold text-slate-700">
+            Try WhatsApp Bot
+          </a>
+          <a routerLink="/register" (click)="toggleMobileMenu()" 
+             title="Register your micro-business on AskMtaa"
+             class="w-full rounded-xl bg-emerald-600 py-2.5 text-center text-sm font-bold text-white block">
+            List Business
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="relative overflow-hidden bg-white reveal">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+      <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-10">
+        
+        <!-- Left Content -->
+        <div class="lg:col-span-6">
+          <h1 class="mt-5 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl lg:text-[3.25rem] lg:leading-[1.15]">
+            Find trusted neighborhood services on 
+            <span class="text-emerald-600">WhatsApp</span>.
+          </h1>
+
+          <p class="mt-5 text-base text-slate-600 sm:text-lg leading-relaxed max-w-xl">
+            No more endless spam in community groups. Just type <strong>“Hello”</strong> and discover verified hairdressers, WiFi sellers, electricians, mechanics and more — with real community ratings.
+          </p>
+
+          <!-- Feature Pills -->
+          <div class="mt-7 flex flex-wrap gap-3">
+            <div class="flex items-center gap-2 rounded-xl bg-slate-50 border border-slate-200 px-3.5 py-2 text-sm font-semibold text-slate-700">
+              <svg class="h-4 w-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Zero Group Spam
+            </div>
+            <div class="flex items-center gap-2 rounded-xl bg-slate-50 border border-slate-200 px-3.5 py-2 text-sm font-semibold text-slate-700">
+              <svg class="h-4 w-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Verified Ratings
+            </div>
+            <div class="flex items-center gap-2 rounded-xl bg-slate-50 border border-slate-200 px-3.5 py-2 text-sm font-semibold text-slate-700">
+              <svg class="h-4 w-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+              Direct WhatsApp Link
+            </div>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <a 
+              href="https://wa.me/254783052621?text=Hello" 
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Start chatting with AskMtaa WhatsApp Bot"
+              class="inline-flex items-center justify-center gap-2.5 rounded-2xl bg-emerald-600 px-7 py-4 text-base font-bold text-white shadow-lg shadow-emerald-600/25 hover:bg-emerald-700 transition active:scale-[0.98]"
+            >
+              Start WhatsApp Chat
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+              </svg>
+            </a>
+            <a 
+              routerLink="/register"
+              title="Register your business on AskMtaa platform"
+              aria-label="Register your local business on AskMtaa"
+              class="inline-flex items-center justify-center rounded-2xl border-2 border-slate-200 bg-white px-7 py-4 text-base font-bold text-slate-700 hover:bg-slate-50 transition text-center"
+            >
+              Register Your Business
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Landing Image -->
+        <div class="lg:col-span-6">
+          <div class="mx-auto max-w-lg">
+            <img 
+              src="/landing.jpeg" 
+              alt="AskMtaa - Find local services on WhatsApp in Kenya" 
+              class="w-full h-auto rounded-3xl shadow-2xl object-cover border border-slate-200"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WHATSAPP BOT INSTRUCTIONS ================= -->
+  <section id="bot-instructions" class="py-16 sm:py-20 bg-white border-y border-slate-100 reveal">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 text-xs font-bold text-emerald-800 mb-4">
+          <svg class="h-3.5 w-3.5 fill-emerald-600" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.205 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+          </svg>
+          WhatsApp Bot Guide
+        </div>
+        <h2 class="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
+          How to use the AskMtaa WhatsApp Bot
+        </h2>
+        <p class="mt-3 text-base text-slate-600">
+          Follow these simple steps to find trusted local services in seconds.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div class="relative rounded-2xl border border-slate-200 bg-slate-50 p-6 hover:shadow-md transition reveal-child">
+          <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600 text-white font-black text-lg mb-4">1</div>
+          <h3 class="text-lg font-bold text-slate-900">Open WhatsApp</h3>
+          <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+            Open WhatsApp on your phone and tap the search icon or the new chat button.
+          </p>
+        </div>
+
+        <div class="relative rounded-2xl border border-slate-200 bg-slate-50 p-6 hover:shadow-md transition reveal-child">
+          <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600 text-white font-black text-lg mb-4">2</div>
+          <h3 class="text-lg font-bold text-slate-900">Save / Message the Bot</h3>
+          <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+            Save our number or click the button below, then send the word 
+            <span class="font-bold text-emerald-700">Hello</span>.
+          </p>
+        </div>
+
+        <div class="relative rounded-2xl border border-slate-200 bg-slate-50 p-6 hover:shadow-md transition reveal-child">
+          <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600 text-white font-black text-lg mb-4">3</div>
+          <h3 class="text-lg font-bold text-slate-900">Choose Category</h3>
+          <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+            The bot will show you categories (Hair, WiFi, Electrician, Mechanic, etc.). Just reply with the number or name.
+          </p>
+        </div>
+
+        <div class="relative rounded-2xl border border-slate-200 bg-slate-50 p-6 hover:shadow-md transition reveal-child">
+          <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600 text-white font-black text-lg mb-4">4</div>
+          <h3 class="text-lg font-bold text-slate-900">Contact the Vendor</h3>
+          <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+            You’ll get a list of nearby vendors with ratings. Tap the link to chat with them directly on WhatsApp.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Commands Box -->
+      <div class="mt-12 max-w-3xl mx-auto rounded-2xl border border-emerald-200 bg-emerald-50 p-6 sm:p-8 reveal-child">
+        <h3 class="text-lg font-bold text-emerald-900 mb-4 flex items-center gap-2">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+          </svg>
+          Useful Bot Commands
+        </h3>
+        <div class="grid sm:grid-cols-2 gap-3 text-sm">
+          <div class="flex items-start gap-2.5">
+            <span class="font-mono bg-white border border-emerald-200 text-emerald-800 px-2 py-0.5 rounded-md font-bold text-xs">Hello</span>
+            <span class="text-slate-700">Start the conversation</span>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="font-mono bg-white border border-emerald-200 text-emerald-800 px-2 py-0.5 rounded-md font-bold text-xs">Menu</span>
+            <span class="text-slate-700">Show main categories again</span>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="font-mono bg-white border border-emerald-200 text-emerald-800 px-2 py-0.5 rounded-md font-bold text-xs">Location</span>
+            <span class="text-slate-700">Change or set your area</span>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <span class="font-mono bg-white border border-emerald-200 text-emerald-800 px-2 py-0.5 rounded-md font-bold text-xs">Help</span>
+            <span class="text-slate-700">Get assistance from the bot</span>
+          </div>
+        </div>
+
+        <div class="mt-6 text-center">
+          <a 
+            href="https://wa.me/254783052621?text=Hello" 
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Message AskMtaa WhatsApp Bot"
+            class="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition shadow-md shadow-emerald-600/20"
+          >
+            <svg class="h-4 w-4 fill-white" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.205 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+            </svg>
+            Message the Bot Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HOW IT WORKS ================= -->
+  <section id="how-it-works" class="py-16 sm:py-20 bg-slate-50 reveal">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto">
+        <h2 class="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
+          Designed for Speed & Simplicity
+        </h2>
+        <p class="mt-3 text-base text-slate-600">
+          Three straightforward steps to finding clean, trusted service contacts in your area.
+        </p>
+      </div>
+
+      <div class="mt-14 grid gap-8 md:grid-cols-3">
+        <div class="relative rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md transition reveal-child">
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600 text-white font-black text-lg">1</div>
+          <h3 class="mt-5 text-xl font-bold text-slate-900">Send “Hello”</h3>
+          <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+            Open WhatsApp and text our bot number. No account, no app download, no forms.
+          </p>
+        </div>
+
+        <div class="relative rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md transition reveal-child">
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600 text-white font-black text-lg">2</div>
+          <h3 class="mt-5 text-xl font-bold text-slate-900">Select Category</h3>
+          <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+            Choose from hair, nails, WiFi, electricians, mechanics and more using simple buttons.
+          </p>
+        </div>
+
+        <div class="relative rounded-2xl border border-slate-200 bg-white p-7 shadow-sm hover:shadow-md transition reveal-child">
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600 text-white font-black text-lg">3</div>
+          <h3 class="mt-5 text-xl font-bold text-slate-900">Connect & Rate</h3>
+          <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+            See ratings, open a direct WhatsApp chat with the vendor, and leave your review after service.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FREQUENTLY ASKED QUESTIONS ================= -->
+  <section id="faqs" class="py-16 sm:py-20 bg-white border-t border-slate-100 reveal">
+    <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Got Questions?</span>
+        <h2 class="mt-2 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">
+          Frequently Asked Questions
+        </h2>
+        <p class="mt-3 text-base text-slate-600">
+          Everything you need to know about using AskMtaa as a customer or service provider.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <!-- FAQ items stay the same -->
+        <details class="group rounded-2xl border border-slate-200 bg-slate-50/50 p-6 [&_summary::-webkit-details-marker]:hidden transition-all duration-200 reveal-child">
+          <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-slate-900">
+            <h3 class="text-base font-bold sm:text-lg">Is using AskMtaa completely free for customers?</h3>
+            <span class="shrink-0 rounded-full bg-white p-1.5 text-slate-900 shadow-sm border border-slate-200 group-open:-rotate-180 transition-transform">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </span>
+          </summary>
+          <p class="mt-4 text-sm sm:text-base text-slate-600 leading-relaxed">
+            Yes! Asking for service providers via our WhatsApp bot or browsing our web directory is 100% free for everyone. You connect directly with vendors without paying any platform fees.
+          </p>
+        </details>
+
+        <details class="group rounded-2xl border border-slate-200 bg-slate-50/50 p-6 [&_summary::-webkit-details-marker]:hidden transition-all duration-200 reveal-child">
+          <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-slate-900">
+            <h3 class="text-base font-bold sm:text-lg">How do service providers get verified on AskMtaa?</h3>
+            <span class="shrink-0 rounded-full bg-white p-1.5 text-slate-900 shadow-sm border border-slate-200 group-open:-rotate-180 transition-transform">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </span>
+          </summary>
+          <p class="mt-4 text-sm sm:text-base text-slate-600 leading-relaxed">
+            Service providers register their business profiles with verified phone numbers, real business locations, and work samples. Customers leave ratings and reviews after using services, helping maintain quality and trust.
+          </p>
+        </details>
+
+        <details class="group rounded-2xl border border-slate-200 bg-slate-50/50 p-6 [&_summary::-webkit-details-marker]:hidden transition-all duration-200 reveal-child">
+          <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-slate-900">
+            <h3 class="text-base font-bold sm:text-lg">How do I list my micro-business on AskMtaa?</h3>
+            <span class="shrink-0 rounded-full bg-white p-1.5 text-slate-900 shadow-sm border border-slate-200 group-open:-rotate-180 transition-transform">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </span>
+          </summary>
+          <p class="mt-4 text-sm sm:text-base text-slate-600 leading-relaxed">
+            Simply click on the <a routerLink="/register" class="font-bold text-emerald-700 hover:underline">Register Your Business</a> link, create an account, select your business category, add your location, and list your services or products. Once approved, customers in your neighborhood will discover you instantly!
+          </p>
+        </details>
+
+        <details class="group rounded-2xl border border-slate-200 bg-slate-50/50 p-6 [&_summary::-webkit-details-marker]:hidden transition-all duration-200 reveal-child">
+          <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-slate-900">
+            <h3 class="text-base font-bold sm:text-lg">Which towns and areas in Kenya are supported?</h3>
+            <span class="shrink-0 rounded-full bg-white p-1.5 text-slate-900 shadow-sm border border-slate-200 group-open:-rotate-180 transition-transform">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </span>
+          </summary>
+          <p class="mt-4 text-sm sm:text-base text-slate-600 leading-relaxed">
+            AskMtaa works across major Kenyan towns including Nairobi, Embu, Thika, Nakuru, Eldoret, Kisumu, and Mombasa, continuously expanding to nearby local estates and neighborhoods.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOR VENDORS ================= -->
+  <section id="for-vendors" class="bg-slate-900 py-16 sm:py-20 text-white reveal">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="grid items-center gap-10 md:grid-cols-12">
+        <div class="md:col-span-8">
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">For Micro-Entrepreneurs</span>
+          <h2 class="mt-3 text-3xl font-black sm:text-4xl leading-tight">
+            Are you a hairdresser, mechanic, or tech seller?
+          </h2>
+          <p class="mt-4 text-base text-slate-300 max-w-2xl leading-relaxed">
+            Stop relying on random group posts that disappear in seconds. List your service on AskMtaa and get discovered the moment someone in your neighborhood looks for exactly what you offer.
+          </p>
+        </div>
+        <div class="md:col-span-4 flex md:justify-end">
+          <a routerLink="/register" 
+             class="w-full sm:w-auto rounded-2xl bg-emerald-600 px-8 py-4 text-center text-base font-bold text-white shadow-lg shadow-emerald-600/30 hover:bg-emerald-500 transition-all duration-200 inline-block"
+             title="Register your business on AskMtaa"
+             aria-label="Register your business on AskMtaa now">
+            Register Your Business Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-white border-t border-slate-200 py-6 mt-auto">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
+        <div class="flex items-center gap-2">
+          <img src="/logo.jpeg" alt="AskMtaa Logo" class="h-7 w-7 rounded-lg object-contain" />
+          <span class="font-bold text-slate-900">AskMtaa</span>
+        </div>
+        <p class="text-sm text-slate-600">
+          &copy; 2026 AskMtaa. All Rights Reserved. Developed by 
+          <span class="font-semibold text-slate-800">Waweru Dan</span> | 
+          <a href="tel:0758079624" class="font-medium text-emerald-700 hover:text-emerald-800 hover:underline transition-colors">
+            0758079624
+          </a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+</div>
